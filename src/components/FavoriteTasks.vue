@@ -1,7 +1,7 @@
 <template>
-  <div class="text-h5 q-mt-lg text-center">Favourite Task</div>
-  <div class="q-mt-lg center-div">
-    <q-list separator bordered style="width: 70%">
+  <div class="text-h5 q-mt-lg q-mb-lg text-center">Favourite Task</div>
+  <div class="q-mt-lg task-item">
+    <q-list separator bordered class="full-width">
       <q-item
         v-for="(task, index) in favoriteTasks"
         :key="task.title"
@@ -93,5 +93,9 @@ const confirmDeleteTask = (index) => {
 }
 .no-task {
   opacity: 0.5;
+}
+.task-item {
+  width: 70%;
+  margin: 0 auto;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div class="text-h5 q-mt-lg text-center">Completed Task</div>
-  <div class="q-mt-lg center-div">
-    <q-list separator bordered style="width: 70%">
+  <div class="text-h5 q-mt-lg q-mb-lg text-center">Completed Task</div>
+  <div class="q-mt-lg task-item">
+    <q-list separator bordered class="full-width">
       <q-item
         v-for="(task, index) in completedTasks"
         :key="task.title"
@@ -93,8 +93,14 @@ const confirmDeleteTask = (index) => {
 .center-div {
   display: flex;
   justify-content: center;
+  width: 70%;
+  margin: 0 auto;
 }
 .no-task {
   opacity: 0.5;
+}
+.task-item {
+  width: 70%;
+  margin: 0 auto;
 }
 </style>

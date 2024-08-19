@@ -3,9 +3,9 @@
     <div class="q-mt-lg center-div">
       <q-input
         class="custom-input"
-        bg-color="white"
+        bg-color="white "
         rounded
-        standout="bg-blue-4 text-white"
+        standout="bg-blue-4 text-white "
         v-model="newTask.title"
         @keyup.enter="addTask"
         placeholder="Add new task"
@@ -36,8 +36,8 @@
       </q-input>
     </div>
     <div class="text-h5 q-mt-lg text-center">Task</div>
-    <div class="q-mt-lg center-div">
-      <q-list separator bordered style="width: 70%">
+    <div class="q-mt-lg task-item">
+      <q-list separator bordered class="full-width">
         <q-item
           v-for="(task, index) in tasks"
           :key="task.title"
@@ -60,6 +60,7 @@
             </q-item-label>
             <q-item-subtitle v-if="task.date" :class="{ done: task.done }">
               <q-icon name="event" />
+              <q-tooltip> Deadline </q-tooltip>
               {{ formatDate(task.date) }}
             </q-item-subtitle>
           </q-item-section>
@@ -89,8 +90,8 @@
       <q-icon name="check" size="100px" color="primary" />
       <div class="text-h5 text-primary text-center">All tasks done :)</div>
     </div>
-    <favorite-tasks :tasks="favoriteTasks" />
-    <completed-tasks :tasks="completedTasks" />
+    <!--<favorite-tasks :tasks="favoriteTasks" />
+    <completed-tasks :tasks="completedTasks" /> -->
   </q-page>
 </template>
 
@@ -155,6 +156,10 @@ const updateDate = (date) => {
 }
 .no-task {
   opacity: 0.5;
+}
+.task-item {
+  width: 70%;
+  margin: 0 auto;
 }
 
 /* Custom input styling */

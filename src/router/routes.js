@@ -3,20 +3,28 @@ const routes = [
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("src/pages/To-do.vue") },
-      { path: "help", component: () => import("src/pages/HelpPage.vue") },
-      { path: "auth", component: () => import("pages/AuthPage.vue") },
       {
-        path: "complete-tasks",
+        path: "",
+        component: () => import("pages/AuthPage.vue"), // Authentication page
+      },
+      {
+        path: "home",
+        component: () => import("src/pages/To-do.vue"),
+      },
+      {
+        path: "home/complete-tasks",
         component: () => import("src/pages/CompleteTaskPage.vue"),
       },
       {
-        path: "favorite-tasks",
+        path: "home/favorite-tasks",
         component: () => import("src/pages/FavoriteTaskPage.vue"),
+      },
+      {
+        path: "home/help",
+        component: () => import("src/pages/HelpPage.vue"),
       },
     ],
   },
-
   {
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),

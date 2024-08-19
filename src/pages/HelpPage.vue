@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-lg">
-    <div class="text-h5 q-mt-lg text-center">Help</div>
+    <div class="text-h5 q-mt-lg q-mb-lg text-center">Help</div>
     <div>
       <q-splitter v-model="splitterModel">
         <template v-slot:before>

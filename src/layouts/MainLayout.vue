@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header>
+    <q-header v-if="!isAuthPage">
       <q-toolbar>
         <q-btn
           v-if="!isAuthPage"
@@ -39,27 +39,25 @@
         "
       >
         <q-list padding>
-          <q-item to="/" clickable exact v-ripple>
+          <q-item to="/home" clickable exact v-ripple>
             <q-item-section avatar>
               <q-icon name="list" />
             </q-item-section>
             <q-item-section> To-do </q-item-section>
           </q-item>
-          <q-item to="/complete-tasks" clickable exact v-ripple>
+          <q-item to="/home/complete-tasks" clickable exact v-ripple>
             <q-item-section avatar>
               <q-icon name="check_circle" />
             </q-item-section>
             <q-item-section> Completed Tasks </q-item-section>
           </q-item>
-
-          <q-item to="/favorite-tasks" clickable exact v-ripple>
+          <q-item to="/home/favorite-tasks" clickable exact v-ripple>
             <q-item-section avatar>
               <q-icon name="star" />
             </q-item-section>
             <q-item-section> Favorite Tasks </q-item-section>
           </q-item>
-
-          <q-item to="/help" exact clickable v-ripple>
+          <q-item to="/home/help" exact clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="help" />
             </q-item-section>
@@ -105,10 +103,10 @@ const leftDrawerOpen = ref(false);
 const route = useRoute();
 const router = useRouter();
 
-const isAuthPage = ref(route.path.includes("/auth"));
+const isAuthPage = ref(route.path === "/" || route.path.startsWith("/auth")); // Check if the route is the root or authentication
 
 watch(route, () => {
-  isAuthPage.value = route.path.includes("/auth");
+  isAuthPage.value = route.path === "/" || route.path.startsWith("/auth");
 });
 
 function toggleLeftDrawer() {
@@ -116,7 +114,7 @@ function toggleLeftDrawer() {
 }
 
 function goToAuthPage() {
-  router.push("/auth");
+  router.push("/");
 }
 
 const timeStamp = Date.now();
