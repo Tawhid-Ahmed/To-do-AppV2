@@ -6,13 +6,31 @@
         bg-color="white"
         rounded
         standout="bg-blue-4 text-white"
-        v-model="newTask"
+        v-model="newTask.title"
         @keyup.enter="addTask"
         placeholder="Add new task"
         dense
         style="width: 50%"
       >
+        <template v-slot:prepend> </template>
         <template v-slot:append>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-date
+                v-model="newTask.date"
+                mask="YYYY-MM-DD HH:mm"
+                @update:model-value="updateDate"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
           <q-btn round dense flat icon="add" @click="addTask" />
         </template>
       </q-input>
@@ -37,9 +55,13 @@
             />
           </q-item-section>
           <q-item-section>
-            <q-item-label :class="{ done: task.done }">{{
-              task.title
-            }}</q-item-label>
+            <q-item-label :class="{ done: task.done }"
+              >{{ task.title }}
+            </q-item-label>
+            <q-item-subtitle v-if="task.date" :class="{ done: task.done }">
+              <q-icon name="event" />
+              {{ formatDate(task.date) }}
+            </q-item-subtitle>
           </q-item-section>
 
           <q-item-section v-if="task.done" side>
@@ -48,7 +70,7 @@
               dense
               color="teal"
               icon="delete"
-              @click.stop="deleteTask(index)"
+              @click.stop="confirmDeleteTask(index)"
             />
           </q-item-section>
           <q-item-section side>
@@ -80,20 +102,27 @@ import CompletedTasks from "src/components/CompletedTasks.vue";
 import { useTaskStore } from "src/stores/tasks";
 
 const $q = useQuasar();
-const newTask = ref("");
-
-// Use the Pinia store
 const taskStore = useTaskStore();
+const newTask = ref({ title: "", date: "" });
 
 const tasks = computed(() => taskStore.tasks);
 const favoriteTasks = computed(() => taskStore.favoriteTasks);
 const completedTasks = computed(() => taskStore.completedTasks);
 
-const toggleTask = (task) => {
-  taskStore.toggleTask(task);
-};
+const { toggleTask, toggleFavorite, formatDate } = taskStore;
 
-const deleteTask = (index) => {
+const addTask = () => {
+  if (typeof newTask.value.title === "string" && newTask.value.title.trim()) {
+    taskStore.addTask({
+      title: newTask.value.title,
+      date: newTask.value.date,
+      done: false,
+      favorite: false,
+    });
+    newTask.value = { title: "", date: "" }; // Reset the form
+  }
+};
+const confirmDeleteTask = (index) => {
   $q.dialog({
     title: "Confirm",
     message: "Do you want to delete this task?",
@@ -109,15 +138,8 @@ const deleteTask = (index) => {
   });
 };
 
-const addTask = () => {
-  if (newTask.value.trim()) {
-    taskStore.addTask(newTask.value);
-    newTask.value = "";
-  }
-};
-
-const toggleFavorite = (task) => {
-  taskStore.toggleFavorite(task);
+const updateDate = (date) => {
+  newTask.value.date = date; // Update the date property in newTask
 };
 </script>
 
