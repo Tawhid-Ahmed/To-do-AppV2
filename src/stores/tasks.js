@@ -43,6 +43,9 @@ export const useTaskStore = defineStore("tasks", {
     formatDate(date) {
       return new Intl.DateTimeFormat("en-GB").format(new Date(date));
     },
+    updateTask(index, updatedTask) {
+      this.tasks[index] = { ...updatedTask };
+    },
     confirmDeleteTask(index) {
       const $q = useQuasar();
       $q.dialog({

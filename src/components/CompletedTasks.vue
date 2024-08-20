@@ -19,9 +19,9 @@
           />
         </q-item-section>
         <q-item-section>
-          <q-item-label :class="{ done: task.done }">{{
-            task.title
-          }}</q-item-label>
+          <q-item-label :class="{ done: task.done }">
+            {{ task.title }}
+          </q-item-label>
           <q-item-subtitle v-if="task.date" :class="{ done: task.done }">
             <q-icon name="event" />
             {{ formatDate(task.date) }}
@@ -56,8 +56,9 @@
 
 <script setup>
 import { computed } from "vue";
-import { useTaskStore } from "src/stores/tasks";
 import { useQuasar } from "quasar";
+import { useTaskStore } from "src/stores/tasks";
+
 const taskStore = useTaskStore();
 const $q = useQuasar();
 const props = defineProps({
@@ -67,20 +68,26 @@ const props = defineProps({
 const completedTasks = computed(() => props.tasks.filter((task) => task.done));
 
 const { toggleTask, toggleFavorite, formatDate } = taskStore;
+
 const confirmDeleteTask = (index) => {
-  $q.dialog({
-    title: "Confirm",
-    message: "Do you want to delete this task?",
-    cancel: true,
-    persistent: true,
-  }).onOk(() => {
-    taskStore.deleteTask(index);
-    $q.notify({
-      message: "Task deleted ☹",
-      icon: "announcement",
-      color: "red",
+  const taskIndex = taskStore.tasks.findIndex(
+    (task) => task === completedTasks.value[index]
+  );
+  if (taskIndex > -1) {
+    $q.dialog({
+      title: "Confirm",
+      message: "Do you want to delete this task?",
+      cancel: true,
+      persistent: true,
+    }).onOk(() => {
+      taskStore.deleteTask(taskIndex);
+      $q.notify({
+        message: "Task deleted ☹",
+        icon: "announcement",
+        color: "red",
+      });
     });
-  });
+  }
 };
 </script>
 
@@ -89,12 +96,6 @@ const confirmDeleteTask = (index) => {
   text-decoration: line-through;
   text-decoration-color: purple;
   color: grey;
-}
-.center-div {
-  display: flex;
-  justify-content: center;
-  width: 70%;
-  margin: 0 auto;
 }
 .no-task {
   opacity: 0.5;

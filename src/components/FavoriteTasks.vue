@@ -54,6 +54,7 @@
 import { computed } from "vue";
 import { useTaskStore } from "src/stores/tasks";
 import { useQuasar } from "quasar";
+
 const taskStore = useTaskStore();
 const $q = useQuasar();
 const props = defineProps({
@@ -63,21 +64,28 @@ const props = defineProps({
 const favoriteTasks = computed(() =>
   props.tasks.filter((task) => task.favorite)
 );
-const { toggleTask, toggleFavorite, formatDate } = taskStore;
+
+const { toggleTask, toggleFavorite } = taskStore;
+
 const confirmDeleteTask = (index) => {
-  $q.dialog({
-    title: "Confirm",
-    message: "Do you want to delete this task?",
-    cancel: true,
-    persistent: true,
-  }).onOk(() => {
-    taskStore.deleteTask(index);
-    $q.notify({
-      message: "Task deleted ☹",
-      icon: "announcement",
-      color: "red",
+  const taskIndex = taskStore.tasks.findIndex(
+    (task) => task === favoriteTasks.value[index]
+  );
+  if (taskIndex > -1) {
+    $q.dialog({
+      title: "Confirm",
+      message: "Do you want to delete this task?",
+      cancel: true,
+      persistent: true,
+    }).onOk(() => {
+      taskStore.deleteTask(taskIndex);
+      $q.notify({
+        message: "Task deleted ☹",
+        icon: "announcement",
+        color: "red",
+      });
     });
-  });
+  }
 };
 </script>
 

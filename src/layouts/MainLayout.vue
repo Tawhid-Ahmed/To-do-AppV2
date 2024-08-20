@@ -58,6 +58,7 @@
             </q-item-section>
             <q-item-section> Favorite Tasks </q-item-section>
           </q-item>
+
           <q-item to="/home/help" exact clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="help" />
