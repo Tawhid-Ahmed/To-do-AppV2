@@ -67,6 +67,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "src/stores/auth";
+import { useRouter } from "vue-router";
 
 const name = ref("");
 const email = ref("");
@@ -78,6 +79,7 @@ const passwordError = ref(false);
 const passwordErrorMessage = ref("");
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const handleProfilePicture = (files) => {
   if (files.length > 0) {
@@ -116,7 +118,8 @@ const register = () => {
       email.value,
       phone.value, // Pass the phone value during registration
       password.value,
-      profilePicture.value
+      profilePicture.value,
+      router // Pass the router instance for redirection
     );
   }
 };

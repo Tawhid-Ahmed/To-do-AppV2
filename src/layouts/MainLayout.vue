@@ -12,7 +12,7 @@
           @click="toggleLeftDrawer"
         />
         <q-space />
-        <q-btn flat round dense icon="login" @click="router.push('/login')" />
+        <q-btn flat round dense icon="login" @click="logout" />
       </q-toolbar>
       <div v-if="!isAuthPage" class="q-px-lg q-pt-xl q-mb-md">
         <div class="text-h3">TO-DO App</div>
@@ -96,6 +96,7 @@
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { date } from "quasar";
+import { useAuthStore } from "src/stores/auth";
 
 defineOptions({
   name: "MainLayout",
@@ -117,6 +118,16 @@ watch(route, () => {
     route.path.startsWith("/login") ||
     route.path.startsWith("/register");
 });
+
+async function logout() {
+  try {
+    await authStore.logout(); // Call the logout function from the store
+    router.push("/login"); // Redirect to login page
+  } catch (error) {
+    console.error("Logout failed:", error);
+    // Handle logout error (e.g., show an error message)
+  }
+}
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;

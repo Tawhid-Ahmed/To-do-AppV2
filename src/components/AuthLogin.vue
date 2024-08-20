@@ -47,14 +47,16 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "src/stores/auth";
+import { useRouter } from "vue-router";
 
 const email = ref("");
 const password = ref("");
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const login = () => {
-  authStore.login(email.value, password.value);
+  authStore.login(email.value, password.value, router);
 };
 
 const forgotPassword = () => {
