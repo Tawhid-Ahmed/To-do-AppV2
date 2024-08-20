@@ -1,11 +1,12 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class="text-h6">Register</div>
+      <div class="text-h5">Sign Up</div>
     </q-card-section>
 
     <q-card-section>
       <q-input
+        outlined
         v-model="name"
         label="Name"
         type="text"
@@ -13,36 +14,52 @@
         clearable
       />
       <q-input
+        outlined
         v-model="email"
         label="Email"
         type="email"
-        :rules="[(val) => !!val || 'Email is required']"
+        :rules="[validateEmail]"
         clearable
       />
       <q-input
+        outlined
+        v-model="phone"
+        label="Phone"
+        type="tel"
+        :rules="[validatePhone]"
+        clearable
+      />
+      <q-input
+        outlined
         v-model="password"
         label="Password"
         type="password"
         :rules="[(val) => !!val || 'Password is required']"
         clearable
+        toggle-visibility
       />
       <q-input
+        outlined
         v-model="confirmPassword"
         label="Confirm Password"
         type="password"
         :rules="[(val) => !!val || 'Confirm Password is required']"
         clearable
-      />
-      <q-uploader
-        v-model="profilePicture"
-        label="Profile Picture"
-        accept="image/*"
-        @added="handleProfilePicture"
+        toggle-visibility
+        :error="passwordError"
+        :error-message="passwordErrorMessage"
       />
     </q-card-section>
 
     <q-card-actions align="right">
-      <q-btn label="Register" color="primary" @click="register" />
+      <q-btn
+        rounded
+        class="full-width q-mb-lg"
+        label="Sign Up"
+        color="primary"
+        @click="register"
+        no-caps
+      />
     </q-card-actions>
   </q-card>
 </template>
@@ -53,9 +70,12 @@ import { useAuthStore } from "src/stores/auth";
 
 const name = ref("");
 const email = ref("");
+const phone = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const profilePicture = ref(null);
+const passwordError = ref(false);
+const passwordErrorMessage = ref("");
 
 const authStore = useAuthStore();
 
@@ -65,16 +85,39 @@ const handleProfilePicture = (files) => {
   }
 };
 
+const validateEmail = (val) => {
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return emailPattern.test(val) || "Please enter a valid email";
+};
+
+const validatePhone = (val) => {
+  const phonePattern = /^(?:\+88|88)?(01[3-9]\d{8})$/;
+  return (
+    phonePattern.test(val) || "Please enter a valid Bangladeshi mobile number"
+  );
+};
+
+const validatePasswords = () => {
+  if (password.value !== confirmPassword.value) {
+    passwordError.value = true;
+    passwordErrorMessage.value = "Passwords do not match";
+    return false;
+  } else {
+    passwordError.value = false;
+    passwordErrorMessage.value = "";
+    return true;
+  }
+};
+
 const register = () => {
-  if (password.value === confirmPassword.value) {
+  if (validatePasswords()) {
     authStore.register(
       name.value,
       email.value,
+      phone.value, // Pass the phone value during registration
       password.value,
       profilePicture.value
     );
-  } else {
-    // Handle password mismatch
   }
 };
 </script>

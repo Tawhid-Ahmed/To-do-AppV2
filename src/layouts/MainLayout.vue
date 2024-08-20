@@ -11,7 +11,8 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-        <q-btn flat round dense icon="login" @click="goToAuthPage" />
+        <q-space />
+        <q-btn flat round dense icon="login" @click="router.push('/login')" />
       </q-toolbar>
       <div v-if="!isAuthPage" class="q-px-lg q-pt-xl q-mb-md">
         <div class="text-h3">TO-DO App</div>
@@ -103,10 +104,17 @@ const leftDrawerOpen = ref(false);
 const route = useRoute();
 const router = useRouter();
 
-const isAuthPage = ref(route.path === "/" || route.path.startsWith("/auth")); // Check if the route is the root or authentication
+const isAuthPage = ref(
+  route.path === "/" ||
+    route.path.startsWith("/login") ||
+    route.path.startsWith("/register")
+); // Check if the route is the root, login, or register page
 
 watch(route, () => {
-  isAuthPage.value = route.path === "/" || route.path.startsWith("/auth");
+  isAuthPage.value =
+    route.path === "/" ||
+    route.path.startsWith("/login") ||
+    route.path.startsWith("/register");
 });
 
 function toggleLeftDrawer() {

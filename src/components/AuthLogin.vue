@@ -1,12 +1,13 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class="text-h6">Login</div>
+      <div class="text-h5">Sign In</div>
     </q-card-section>
 
     <q-card-section>
       <q-input
         v-model="email"
+        outlined
         label="Email"
         type="email"
         :rules="[(val) => !!val || 'Email is required']"
@@ -14,15 +15,31 @@
       />
       <q-input
         v-model="password"
+        outlined
         label="Password"
         type="password"
         :rules="[(val) => !!val || 'Password is required']"
         clearable
       />
+      <q-link
+        @click="forgotPassword"
+        class="q-mt-sm text-primary"
+        style="cursor: pointer; display: block"
+      >
+        Forgot Password?
+      </q-link>
     </q-card-section>
 
-    <q-card-actions align="right">
-      <q-btn label="Login" color="primary" @click="login" />
+    <q-card-actions align="center">
+      <q-btn
+        rounded
+        class="full-width q-mb-lg"
+        size="md"
+        label="Sign in"
+        color="primary"
+        @click="login"
+        no-caps
+      />
     </q-card-actions>
   </q-card>
 </template>
@@ -38,6 +55,14 @@ const authStore = useAuthStore();
 
 const login = () => {
   authStore.login(email.value, password.value);
+};
+
+const forgotPassword = () => {
+  // Handle forgot password logic
+};
+
+const goToSignUp = () => {
+  router.push({ name: "SignUp" }); // Replace 'SignUp' with the route name for the signup page
 };
 </script>
 
